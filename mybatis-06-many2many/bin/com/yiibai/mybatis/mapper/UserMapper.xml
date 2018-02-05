@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiibai.mybatis.mapper.UserMapper">
+	<parameterMap type="User" id="parameterUserMap">
+		<parameter property="userId" />
+		<parameter property="userName" />
+		<parameter property="userDept" />
+		<parameter property="userPhone" />
+		<parameter property="userWebsite" />
+	</parameterMap>
+
+	<insert id="insert" parameterMap="parameterUserMap">
+		insert into user(user_id, user_name, user_dept, user_phone, user_website)
+		values(#{userId}, #{userName}, #{userDept}, #{userPhone}, #{userWebsite})
+	</insert>
+
+	<resultMap type="User" id="UserMap">
+		<result property="userId" column="user_id" />
+		<result property="userName" column="user_name" />
+		<result property="userDept" column="user_dept" />
+		<result property="userPhone" column="user_phone" />
+		<result property="userWebsite" column="user_website" />
+		<collection property="groups" column="user_id" select="com.yiibai.mybatis.mapper.UserGroupMapper.selectGroupsByUserId" />
+	</resultMap>
+
+	<select id="selectUserById" resultMap="UserMap" parameterType="int">
+		select * from `user` where user_id = #{userId}
+	</select>
+</mapper>

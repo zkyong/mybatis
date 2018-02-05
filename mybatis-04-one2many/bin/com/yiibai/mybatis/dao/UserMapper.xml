@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yiibai.mybatis.dao.UserMapper">
+	<resultMap id="BaseResultMap" type="com.yiibai.mybatis.models.User"/>
+	
+	<resultMap id="One2ManyMap" type="User">
+		<result property="id" column="user_id" />
+		<result property="name" column="name" />
+		<result property="dept" column="dept" />
+		<result property="phone" column="phone" />
+		<result property="website" column="website" />
+		<collection property="posts" ofType="com.yiibai.mybatis.models.Post" column="user_id">
+			<id property="id" column="post_id" javaType="int" jdbcType="INTEGER"/>
+			<result property="userid" column="userid" javaType="int" jdbcType="INTEGER"/>
+            <result property="title" column="title" javaType="string" jdbcType="VARCHAR"/>
+            <result property="content" column="content" javaType="string" jdbcType="VARCHAR"/> 
+		</collection>
+	</resultMap>
+
+	<select id="selectOne2Many" resultMap="One2ManyMap">
+		select 
+			u.id user_id,
+			u.name,
+			u.dept,
+			u.phone,
+			u.website,
+			p.id post_id,
+			p.userid,
+			p.title,
+			p.content
+		from user u 
+		left join post p on u.id = p.userid
+		where u.id = #{user_id}
+	</select>
+</mapper>

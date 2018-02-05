@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yiibai.mybatis.dao.PostMapper">
+
+	<resultMap type="Post" id="Many2OneMap">
+		<result property="id" column="post_id" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<association property="user" javaType="User">
+			<id property="id" column="user_id" />
+			<result property="name" column="name" />
+			<result property="dept" column="dept" />
+			<result property="phone" column="phone" />
+			<result property="website" column="website" />
+		</association>
+	</resultMap>
+
+	<select id="selectMany2One" resultMap="Many2OneMap">
+		select 
+			p.id post_id,
+			p.userid,
+			p.title,
+			p.content,
+			u.id user_id,
+			u.name,
+			u.dept,
+			u.phone,
+			u.website
+		from post p 
+		left join user u on u.id = p.userid
+	</select>
+</mapper>
